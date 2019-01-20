@@ -1,4 +1,4 @@
-FROM buildpack-deps:stretch
+FROM alpine:3.8
 
 LABEL maintainer="Sebastian Ramirez <tiangolo@gmail.com>"
 
@@ -7,8 +7,8 @@ ENV NGINX_VERSION nginx-1.15.0
 ENV NGINX_RTMP_MODULE_VERSION 1.2.1
 
 # Install dependencies
-RUN apt-get update && \
-    apt-get install -y ca-certificates openssl libssl-dev && \
+RUN apk update && \
+    apk add openssl ca-certificates pcre && \
     rm -rf /var/lib/apt/lists/*
 
 # Download and decompress Nginx
@@ -27,7 +27,12 @@ RUN mkdir -p /tmp/build/nginx-rtmp-module && \
 # Build and install Nginx
 # The default puts everything under /usr/local/nginx, so it's needed to change
 # it explicitly. Not just for order but to have it in the PATH
-RUN cd /tmp/build/nginx/${NGINX_VERSION} && \
+RUN apk add --virtual .build-dependencies \
+        gcc binutils build-base \
+        libgcc make pkgconf pkgconfig \
+        openssl-dev musl-dev \
+        libc-dev pcre-dev zlib-dev && \
+    cd /tmp/build/nginx/${NGINX_VERSION} && \
     ./configure \
         --sbin-path=/usr/local/sbin/nginx \
         --conf-path=/etc/nginx/nginx.conf \
@@ -43,11 +48,23 @@ RUN cd /tmp/build/nginx/${NGINX_VERSION} && \
     make -j $(getconf _NPROCESSORS_ONLN) && \
     make install && \
     mkdir /var/lock/nginx && \
-    rm -rf /tmp/build
+    rm -rf /tmp/build && \
+    apk del .build-dependencies
 
 # Forward logs to Docker
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stderr /var/log/nginx/error.log
+
+# Download latest ffmpeg x64 release binary
+RUN mkdir -p /tmp/build/ffmpeg && \
+    cd /tmp/build/ffmpeg && \
+    wget https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz && \
+    tar xf ffmpeg-release-amd64-static.tar.xz && \
+    cd $(ls) && \
+    cp ffmpeg /usr/bin/ && \
+    cp ffprobe /usr/bin/ && \
+    rm -rf https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz && \
+    rm -rf ffmpeg-release-amd64-static.tar.xz
 
 # Set up config file
 COPY nginx.conf /etc/nginx/nginx.conf
