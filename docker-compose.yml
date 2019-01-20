@@ -7,4 +7,4 @@ services:
     - ./nginx.conf:/etc/nginx/nginx.conf
     - ./recordings:/recordings
     ports:
-    - "8995:1935"
+    - "1935:1935"
