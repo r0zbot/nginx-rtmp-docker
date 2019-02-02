@@ -8,7 +8,7 @@
 
 ## Description
 
-This is a fork of [**tiangolo's Docker Image**](https://github.com/tiangolo/nginx-rtmp-docker) using Alpine for a smaller image and with added FFmpeg support.
+This is a fork of [**tiangolo's Docker Image**](https://github.com/tiangolo/nginx-rtmp-docker) using Alpine for a smaller image and with added FFmpeg support, as well as a more comprehensive default nginx.conf.
 
 This [**Docker**](https://www.docker.com/) image can be used to create an RTMP server for multimedia / video streaming and/or transcoding using [**Nginx**](http://nginx.org/en/) and [**nginx-rtmp-module**](https://github.com/arut/nginx-rtmp-module), built from the current latest sources (Nginx 1.15.0 and nginx-rtmp-module 1.2.1).
 
@@ -69,7 +69,13 @@ docker logs nginx-rtmp
 
 ## Extending
 
-If you need to modify the configurations you can create a file `nginx.conf.template` and replace the one in this image using a `Dockerfile` that is based on the image, for example:
+If you need to extend or modify the `nginx.conf` file, you have a few options:
+
+* You can mount the `nginx.conf.template` file in the current directory to the container and make changes to it. This can be done by uncommenting the `- ./nginx.conf.template:/etc/nginx/nginx.conf.template` line in `docker-compose.yml`. This is great for testing, as you don't need to rebuild the image for every change you make (only restart the container). 
+
+* You can replace the `image: r0zbot/nginx-rtmp:latest` line with `build: .`. Make sure to run `docker-compose build` after any changes are made to the files so they get applied. 
+
+* You can create a file `nginx.conf.template` and replace the one in this image using a `Dockerfile` that is based on the image, for example:
 
 ```Dockerfile
 FROM r0zbot/nginx-rtmp
@@ -77,13 +83,13 @@ FROM r0zbot/nginx-rtmp
 COPY nginx.conf.template /etc/nginx/nginx.conf.template
 ```
 
-You can start from it and modify it as you need. Here's the [documentation related to `nginx-rtmp-module`](https://github.com/arut/nginx-rtmp-module/wiki/Directives).
+You can start with [this file](https://github.com/r0zbot/nginx-rtmp-docker/blob/master/nginx.conf.template) and modify it as you need. Here's the [documentation related to `nginx-rtmp-module`](https://github.com/arut/nginx-rtmp-module/wiki/Directives).
 
 ## Technical details
 
-* This image is built from the alpine image, which means its small in size. 
+* This image is based on the alpine docker image.
 
-* It is built from the official sources of **Nginx** and **nginx-rtmp-module** without adding anything else. (Surprisingly, most of the available images that include **nginx-rtmp-module** are made from different sources, old versions or add several other components).
+* It is built from the official sources of **Nginx** and **nginx-rtmp-module**.
 
 * The FFmpeg version used is the most recent x64 one available when building, so this will not work on 32 bit or ARM systems at the moment. 
 

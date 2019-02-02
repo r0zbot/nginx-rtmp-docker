@@ -2,6 +2,7 @@ version: '2'
 services:
   rtmp:
     build: .
+    # image: r0zbot/nginx-rtmp:latest
     volumes:
     #- ./nginx.conf.template:/etc/nginx/nginx.conf.template
     - ./recordings:/recordings
