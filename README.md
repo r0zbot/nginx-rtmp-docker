@@ -14,9 +14,9 @@ This [**Docker**](https://www.docker.com/) image can be used to create an RTMP s
 
 The main purpose (and test case) to build it was to allow streaming from [**OBS Studio**](https://obsproject.com/) to both Twitch and YouTube at the same time, but with different resolutions/bitrate, since YouTube supports transcoding for everyone, and Twitch only does for partner streamers. 
 
-**GitHub repo**: <https://github.com/r0zbot/nginx-rtmp-docker>
+**GitHub repo**: [https://github.com/r0zbot/nginx-rtmp-docker](https://github.com/r0zbot/nginx-rtmp-docker)
 
-**Docker Hub image**: <https://hub.docker.com/r/r0zbot/nginx-rtmp/>
+**Docker Hub image**: [https://hub.docker.com/r/r0zbot/nginx-rtmp/](https://hub.docker.com/r/r0zbot/nginx-rtmp/)
 
 ## Details
 
