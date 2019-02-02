@@ -1,7 +1,5 @@
 FROM alpine:3.8
 
-LABEL maintainer="Sebastian Ramirez <tiangolo@gmail.com>"
-
 # Versions of Nginx and nginx-rtmp-module to use
 ENV NGINX_VERSION nginx-1.15.8
 ENV NGINX_RTMP_MODULE_VERSION 1.2.1
@@ -63,8 +61,7 @@ RUN mkdir -p /tmp/build/ffmpeg && \
     cd $(ls) && \
     cp ffmpeg /usr/bin/ && \
     cp ffprobe /usr/bin/ && \
-    rm -rf https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz && \
-    rm -rf ffmpeg-release-amd64-static.tar.xz
+    rm -rf /tmp/build
 
 # Set up config template
 COPY nginx.conf.template /etc/nginx/nginx.conf.template
