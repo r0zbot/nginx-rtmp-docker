@@ -19,7 +19,7 @@ rtmp {
 
         application transcode-dual {
             live on;
-            push rtmp://127.0.0.1:1935/transcode/twitch;
+            push rtmp://127.0.0.1:1935/transcode/$name;
             push ${SOURCE_URL}${SOURCE_KEY} live=1;
         }
 
