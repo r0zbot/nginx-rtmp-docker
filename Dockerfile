@@ -3,12 +3,12 @@ FROM alpine:3.8
 LABEL maintainer="Sebastian Ramirez <tiangolo@gmail.com>"
 
 # Versions of Nginx and nginx-rtmp-module to use
-ENV NGINX_VERSION nginx-1.15.0
+ENV NGINX_VERSION nginx-1.15.8
 ENV NGINX_RTMP_MODULE_VERSION 1.2.1
 
 # Install dependencies
 RUN apk update && \
-    apk add openssl ca-certificates pcre && \
+    apk add openssl ca-certificates pcre gettext && \
     rm -rf /var/lib/apt/lists/*
 
 # Download and decompress Nginx
@@ -66,8 +66,12 @@ RUN mkdir -p /tmp/build/ffmpeg && \
     rm -rf https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz && \
     rm -rf ffmpeg-release-amd64-static.tar.xz
 
-# Set up config file
-COPY nginx.conf /etc/nginx/nginx.conf
+# Set up config template
+COPY nginx.conf.template /etc/nginx/nginx.conf.template
+
+# Script for replacing env variables on container startup
+COPY docker-entrypoint.sh /
+ENTRYPOINT ["/docker-entrypoint.sh"]
 
 EXPOSE 1935
 CMD ["nginx", "-g", "daemon off;"]

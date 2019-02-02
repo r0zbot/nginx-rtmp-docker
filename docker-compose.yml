@@ -2,9 +2,16 @@ version: '2'
 services:
   rtmp:
     build: .
-    # image: tiangolo/nginx-rtmp:latest
     volumes:
-    - ./nginx.conf:/etc/nginx/nginx.conf
+    #- ./nginx.conf.template:/etc/nginx/nginx.conf.template
     - ./recordings:/recordings
     ports:
     - "1935:1935"
+    environment:
+    - SOURCE_KEY=${SOURCE_KEY}
+    - TRANSCODE_KEY=${TRANSCODE_KEY}
+    - PRESET=${PRESET}
+    - RESOLUTION=${RESOLUTION}
+    - BITRATE=${BITRATE}
+    - SOURCE_URL=${SOURCE_URL}
+    - TRANSCODE_URL=${TRANSCODE_URL}
