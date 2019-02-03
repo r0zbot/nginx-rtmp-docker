@@ -57,7 +57,7 @@ If you wish to use the default use cases, all you need to do is edit the `.env` 
 * Click "Play"
 * Now VLC should start playing whatever you are transmitting from OBS Studio
 
-For testing the transcoding option, you can just replace the _live_ part of the url with _transcoded_. So, for example, if you're streaming to `rtmp://192.168.0.30/transcode` with the key "test", you can see the transcoded version on `rtmp://192.168.0.30/transcoded/test`
+For testing the transcoding option, you can just replace the _live_ part of the url with _transcoded_. So, for example, if you're streaming to `rtmp://192.168.0.30/transcode` with the key "test", you can see the transcoded version on `rtmp://192.168.0.30/transcoded/test`. (NOTE: when using transcode-dual, the url for this will always be "/transcoded/$name" with no key)
 
 ## Debugging
 
